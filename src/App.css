@@ -1,0 +1,54 @@
+h1,
+p {
+  margin: 0;
+}
+
+.app {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.semester-details {
+  margin: 6px;
+  padding: 30px;
+  border: 2px dashed #707070;
+}
+
+.semester-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.course-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.course-row > * {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.course-row > .course-id {
+  font-weight: bold;
+}
+
+.course-row > .course-credits {
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
+button {
+  border: 1px solid #707070;
+  background: none;
+  border-radius: 16px;
+}
+
+.cgpa-box {
+  margin: 24px;
+  padding: 16px;
+  border: 2px dashed #707070;
+}

@@ -151,30 +151,30 @@ class App extends React.Component {
     } = this.state;
 
     return (
-      <div>
+      <div class="app">
         {semesters.map((semester) => {
           const { title, courses } = semester;
           return (
-            <div>
-              <p>Semester {title}</p>
+            <div class="semester-details">
+              <p class="semester-title">Semester {title}</p>
               {Object.keys(courses).map((code) => {
                 const { credits, gradeAwarded } = courses[code];
                 const { name } = details[code];
                 return (
-                  <div>
-                    <p>{code}</p>
+                  <div class="course-row">
+                    <p className="course-id">{code}</p>
                     <p>{name}</p>
-                    <p>{credits}</p>
+                    <p className="course-credits">{credits}</p>
                     <button
                       onClick={() => this.changeGrade(title, code, "DECREMENT")}
                     >
-                      Down
+                      -
                     </button>
                     <p>{gradeAwarded}</p>
                     <button
                       onClick={() => this.changeGrade(title, code, "INCREMENT")}
                     >
-                      Up
+                      +
                     </button>
                   </div>
                 );
@@ -182,7 +182,7 @@ class App extends React.Component {
             </div>
           );
         })}
-        <p>CGPA: {this.calculatePointer()}</p>
+        <p className="cgpa-box">CGPA: {this.calculatePointer()}</p>
       </div>
     );
   }
