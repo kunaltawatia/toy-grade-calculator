@@ -30,6 +30,8 @@ class App extends React.Component {
         name: "Artificial Intelligence",
       },
     },
+    cgpa: 0,
+    sgpa: [0, 0],
   };
 
   getGradeValue = (grade) => {
@@ -110,11 +112,21 @@ class App extends React.Component {
     }]
     */
 
-    this.setState({
-      transcript: {
-        semesters: newSemestersArray,
+    this.setState(
+      {
+        transcript: {
+          semesters: newSemestersArray,
+        },
       },
-    });
+      () => {
+        this.updateLocalStorage();
+        this.calculatePointer();
+      }
+    );
+  };
+
+  updateLocalStorage = () => {
+    localStorage.setItem("state", JSON.stringify(this.state));
   };
 
   calculatePointer = () => {
@@ -125,6 +137,8 @@ class App extends React.Component {
     let totalCredits = 0,
       totalPointsEarned = 0;
 
+    let sgpa = [];
+
     // sgpa
     for (const semester of semesters) {
       let semesterCredits = 0,
@@ -134,25 +148,42 @@ class App extends React.Component {
         semesterCredits += credits;
         semesterPointsEarned += credits * this.getGradeValue(gradeAwarded);
       }
-      const sgpa = semesterPointsEarned / semesterCredits;
-      console.log(semester.title, sgpa);
+      const current_sgpa = semesterPointsEarned / semesterCredits;
+      sgpa.push(current_sgpa);
+
       totalCredits += semesterCredits;
       totalPointsEarned += semesterPointsEarned;
     }
 
     // cgpa
-    return totalPointsEarned / totalCredits;
+    let cgpa = totalPointsEarned / totalCredits;
+    this.setState({ cgpa, sgpa });
   };
+
+  componentDidMount() {
+    const { localStorage } = window;
+    const prev_state = localStorage.getItem("state");
+    try {
+      // bulletproof
+      const value = JSON.parse(prev_state);
+      if (value) this.setState(value, this.calculatePointer);
+    } catch (err) {
+      console.error(err);
+      this.calculatePointer();
+    }
+  }
 
   render() {
     const {
       transcript: { semesters },
       details,
+      cgpa,
+      sgpa,
     } = this.state;
 
     return (
       <div class="app">
-        {semesters.map((semester) => {
+        {semesters.map((semester, semester_idx) => {
           const { title, courses } = semester;
           return (
             <div class="semester-details">
@@ -179,10 +210,12 @@ class App extends React.Component {
                   </div>
                 );
               })}
+
+              <p className="sgpa">SGPA: {sgpa[semester_idx]}</p>
             </div>
           );
         })}
-        <p className="cgpa-box">CGPA: {this.calculatePointer()}</p>
+        <p className="cgpa-box">CGPA: {cgpa}</p>
       </div>
     );
   }

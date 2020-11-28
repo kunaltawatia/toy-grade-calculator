@@ -21,6 +21,11 @@ p {
   margin-bottom: 16px;
 }
 
+.sgpa {
+  margin-top: 30px;
+  font-weight: bold;
+}
+
 .course-row {
   display: flex;
   flex-direction: row;
