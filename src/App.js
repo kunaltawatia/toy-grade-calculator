@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 
 class App extends React.Component {
   state = {
@@ -8,30 +7,105 @@ class App extends React.Component {
         {
           title: "I",
           courses: {
-            CS323: {
-              credits: 3,
-              gradeAwarded: "A",
-            },
+            CS111: { credits: 5, gradeAwarded: "A" },
+            CY211: { credits: 4, gradeAwarded: "A" },
+            HS111: { credits: 3, gradeAwarded: "A" },
+            MA111: { credits: 5, gradeAwarded: "A" },
+            ME111: { credits: 4, gradeAwarded: "A" },
+            PH111: { credits: 5, gradeAwarded: "A" },
           },
         },
         {
           title: "II",
           courses: {
-            CS323: {
-              credits: 3,
-              gradeAwarded: "A",
-            },
+            CS112: { credits: 4, gradeAwarded: "A" },
+            EE121: { credits: 5, gradeAwarded: "A" },
+            HS121: { credits: 3, gradeAwarded: "A" },
+            MA121: { credits: 5, gradeAwarded: "A" },
+            ME121: { credits: 4, gradeAwarded: "A" },
+            ME122: { credits: 5, gradeAwarded: "A" },
+          },
+        },
+        {
+          title: "III",
+          courses: {
+            CS121: { credits: 5, gradeAwarded: "A" },
+            CS211: { credits: 4, gradeAwarded: "A" },
+            CS212: { credits: 4, gradeAwarded: "A" },
+            EE211: { credits: 5, gradeAwarded: "A" },
+            EE213: { credits: 4, gradeAwarded: "A" },
+            HS211: { credits: 3, gradeAwarded: "A" },
+          },
+        },
+        {
+          title: "IV",
+          courses: {
+            CS221: { credits: 3, gradeAwarded: "A" },
+            CS222: { credits: 3, gradeAwarded: "A" },
+            CS223: { credits: 4, gradeAwarded: "A" },
+            HS221: { credits: 3, gradeAwarded: "A" },
+            MA221: { credits: 5, gradeAwarded: "A" },
+            CS299: { credits: 3, gradeAwarded: "A" },
+          },
+        },
+        {
+          title: "V",
+          courses: {
+            CS311: { credits: 4, gradeAwarded: "A" },
+            CS314: { credits: 3, gradeAwarded: "A" },
+            CS323: { credits: 3, gradeAwarded: "A" },
+            HSL4010: { credits: 3, gradeAwarded: "A" },
+          },
+        },
+        {
+          title: "V-VI",
+          courses: {
+            CS321: { credits: 4, gradeAwarded: "A" },
+            CS322: { credits: 3, gradeAwarded: "A" },
+            CS399: { credits: 4, gradeAwarded: "A" },
+            HSL4040: { credits: 3, gradeAwarded: "A" },
           },
         },
       ],
     },
     details: {
-      CS323: {
-        name: "Artificial Intelligence",
-      },
+      CS111: { name: "Computer Programming" },
+      CY211: { name: "Chemistry" },
+      HS111: { name: "English Language and Communication Skills" },
+      MA111: { name: "Linear Algebra and Calculus" },
+      ME111: { name: "System Exploration--Drawing" },
+      PE111: { name: "Physical Exercises I" },
+      PH111: { name: "Electromagnetism and Optics" },
+      CS112: { name: "Discrete Mathematics" },
+      EE121: { name: "Basic Electronics Engineering" },
+      HS121: { name: "Rights Responsibilities Law and Constitution" },
+      MA121: { name: "Complex Analysis and Differential Equation" },
+      ME121: { name: "System Exploration Workshop" },
+      ME122: { name: "Engineering Mechanics" },
+      PE121: { name: "Physical Exersice II" },
+      CS121: { name: "Data Structures and Algorithms" },
+      CS211: { name: "Digital Logic & Design" },
+      CS212: { name: "Object Oriented Analysis & Design" },
+      EE211: { name: "Basic Electrical Engineering" },
+      EE213: { name: "Signals and Systems" },
+      HS211: { name: "Economics" },
+      CS221: { name: "Computer Organization and Architecture" },
+      CS222: { name: "Theory of Computation" },
+      CS223: { name: "Software Engineering" },
+      HS221: { name: "Principles of Management" },
+      MA221: { name: "Probability Statistics and Random Processes" },
+      CS311: { name: "Data Communication" },
+      CS314: { name: "Algorithm Design and Analysis" },
+      CS323: { name: "Artificial Intelligence" },
+      HSL4010: { name: "Fundamentals of Logic" },
+      HSL4040: { name: "Foundations of Sustainability" },
+      CS299: { name: "B.Tech. Project" },
+      CS399: { name: "B.Tech. Project" },
+      CS321: { name: "Computer Networks" },
+      CS322: { name: "Database Systems" },
     },
     cgpa: 0,
-    sgpa: [0, 0],
+    sgpa: [0, 0, 0, 0, 0, 0],
   };
 
   getGradeValue = (grade) => {
@@ -88,7 +162,8 @@ class App extends React.Component {
 
       const previousCourseDetails = semester.courses[courseCode];
       const previousGrade = previousCourseDetails.gradeAwarded;
-      return {
+
+      const toBeRetrned = {
         ...semester,
         courses: {
           ...semester.courses,
@@ -98,19 +173,10 @@ class App extends React.Component {
           },
         },
       };
+      console.log(toBeRetrned);
+
+      return toBeRetrned;
     });
-    /*
-    [{...}, {...}]
-    [{...}, {
-      courses: {
-        ...
-        code : {
-          credits: ...
-          gradeAwarded: withAction
-        }
-      }
-    }]
-    */
 
     this.setState(
       {
@@ -118,21 +184,19 @@ class App extends React.Component {
           semesters: newSemestersArray,
         },
       },
-      () => {
-        this.updateLocalStorage();
-        this.calculatePointer();
-      }
+      this.calculatePointer
     );
   };
 
   updateLocalStorage = () => {
-    localStorage.setItem("state", JSON.stringify(this.state));
+    localStorage.setItem(
+      "transcript",
+      JSON.stringify({ transcript: this.state.transcript })
+    );
   };
 
   calculatePointer = () => {
-    const {
-      transcript: { semesters },
-    } = this.state;
+    const semesters = this.state.transcript.semesters;
 
     let totalCredits = 0,
       totalPointsEarned = 0;
@@ -157,18 +221,18 @@ class App extends React.Component {
 
     // cgpa
     let cgpa = totalPointsEarned / totalCredits;
-    this.setState({ cgpa, sgpa });
+    this.setState({ cgpa, sgpa }, this.updateLocalStorage);
   };
 
   componentDidMount() {
     const { localStorage } = window;
-    const prev_state = localStorage.getItem("state");
+    const prev_state = localStorage.getItem("transcript");
     try {
-      // bulletproof
       const value = JSON.parse(prev_state);
       if (value) this.setState(value, this.calculatePointer);
     } catch (err) {
       console.error(err);
+    } finally {
       this.calculatePointer();
     }
   }
@@ -182,40 +246,60 @@ class App extends React.Component {
     } = this.state;
 
     return (
-      <div class="app">
-        {semesters.map((semester, semester_idx) => {
-          const { title, courses } = semester;
-          return (
-            <div class="semester-details">
-              <p class="semester-title">Semester {title}</p>
-              {Object.keys(courses).map((code) => {
-                const { credits, gradeAwarded } = courses[code];
-                const { name } = details[code];
-                return (
-                  <div class="course-row">
-                    <p className="course-id">{code}</p>
-                    <p>{name}</p>
-                    <p className="course-credits">{credits}</p>
-                    <button
-                      onClick={() => this.changeGrade(title, code, "DECREMENT")}
+      <div className="flex flex-col">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+          {semesters.map((semester, semester_idx) => {
+            const { title, courses } = semester;
+            return (
+              <div key={title} className="border-2 border-dashed p-4 md:p-8">
+                <p className="font-bold text-3xl mb-6">Semester {title}</p>
+                {Object.keys(courses).map((code) => {
+                  const { credits, gradeAwarded } = courses[code];
+                  const { name } = details[code] ?? {};
+                  return (
+                    <div
+                      className="flex items-center my-1 space-x-8"
+                      key={code}
                     >
-                      -
-                    </button>
-                    <p>{gradeAwarded}</p>
-                    <button
-                      onClick={() => this.changeGrade(title, code, "INCREMENT")}
-                    >
-                      +
-                    </button>
-                  </div>
-                );
-              })}
-
-              <p className="sgpa">SGPA: {sgpa[semester_idx]}</p>
-            </div>
-          );
-        })}
-        <p className="cgpa-box">CGPA: {cgpa}</p>
+                      <div className="flex flex-grow space-x-2">
+                        <p className="font-bold">{code}</p>
+                        <p>{name}</p>
+                      </div>
+                      <p>{credits}</p>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          type="button"
+                          class="bg-gray-100 rounded-md px-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                          onClick={() =>
+                            this.changeGrade(title, code, "DECREMENT")
+                          }
+                        >
+                          -
+                        </button>
+                        <p>{gradeAwarded}</p>
+                        <button
+                          type="button"
+                          class="bg-gray-100 rounded-md px-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                          onClick={() =>
+                            this.changeGrade(title, code, "INCREMENT")
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+                <p className="font-bold text-lg mt-6">
+                  SGPA: {sgpa[semester_idx]}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+        <p className="self-center border-2 border-dashed p-4 font-bold text-xl my-8">
+          CGPA: {cgpa}
+        </p>
       </div>
     );
   }
